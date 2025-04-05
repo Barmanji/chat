@@ -318,7 +318,21 @@ const updateUserBio = asyncHandler(async (req, res) => {
         .json(new ApiResponse(200, updatedUser, "Bio updated successfully"));
 });
 
-const getFriendsList = asyncHandler(async (req, res) => {});
+const getFriendsList = asyncHandler(async (req, res) => {
+    const { username } = req.params;
+    const userWithFriends = await User.findOne(username).populate({
+        path: "friends",
+        select: "_id username fullname profilePicture status",
+    });
+    if (!userWithFriends) {
+        throw new ApiError(404, "User not found");
+    }
+    return res
+        .status(200)
+        .json(
+            new ApiResponse(200, userWithFriends.friends, "Friend list fetched")
+        );
+});
 
 const getUserProfile = asyncHandler(async (req, res) => {
     const { username } = req.params;
@@ -326,8 +340,6 @@ const getUserProfile = asyncHandler(async (req, res) => {
         //can be done as !username?.trim()
         throw new ApiError(400, "Username is not found");
     }
-
-    //------------------- Aggrigation pipelines ------------------------//
     const dashboard = await User.aggregate([
         {
             $match: { username: username.toLowerCase() },
