@@ -16,6 +16,7 @@ const messageSchema = new Schema(
         content: {
             type: String,
             required: true,
+            trim: true,
         },
         messageType: {
             type: String,
@@ -36,4 +37,4 @@ const messageSchema = new Schema(
 );
 
 messageSchema.plugin(mongooseAggregatePaginate);
-export const Messages = mongoose.model("Messages", messageSchema);
+export const Message = mongoose.model("Message", messageSchema);

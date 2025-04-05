@@ -40,13 +40,9 @@ const userSchema = new Schema(
             type: String, //cloudnary something something like AWS for url ()FREEE() read about it!
             required: true,
         },
-        coverImage: {
-            type: String,
-        },
         bio: {
             type: String,
-            required: true,
-            trim: true,
+            default: "",
         },
         status: {
             type: String,
@@ -74,9 +70,11 @@ userSchema.methods.isPasswordCorrect = async function (password) {
     return Password;
 };
 
-userSchema.methods.generateAccessToken = function () { // jwt.verify(token, secretOrPublicKey, [options, callback]) or jwt.sign(payload, secretOrPrivateKey, [options, callback]) and 1h 1d you can pass liek htat
+userSchema.methods.generateAccessToken = function () {
+    // jwt.verify(token, secretOrPublicKey, [options, callback]) or jwt.sign(payload, secretOrPrivateKey, [options, callback]) and 1h 1d you can pass liek htat
     return jwt.sign(
-        { // These data will be encoded by JWT
+        {
+            // These data will be encoded by JWT
             _id: this._id,
             username: this.username,
             email: this.email,
@@ -88,7 +86,8 @@ userSchema.methods.generateAccessToken = function () { // jwt.verify(token, secr
         }
     );
 };
-userSchema.methods.generateRefreshToken = function () { // stance methods Instances of Models are documents. Documents have many of their own built-in instance methods. We may also define our own custom document instance methods.
+userSchema.methods.generateRefreshToken = function () {
+    // stance methods Instances of Models are documents. Documents have many of their own built-in instance methods. We may also define our own custom document instance methods.
     return jwt.sign(
         {
             _id: this._id,

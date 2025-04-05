@@ -20,7 +20,7 @@ const friendRequestSchema = new Schema(
         },
     },
     {
-        timestamps: { createdAt: "timestamp", updatedAt: false }, // logs only need timestamp
+        timestamps: true,
     }
 );
 
