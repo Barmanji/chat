@@ -20,7 +20,7 @@ import userRouter from "./routes/user.routes.js";
 import chatRouter from "./routes/chat.routes.js";
 import messageRouter from "./routes/message.routes.js";
 import groupRouter from "./routes/group.routes.js";
-import friendRequestRouter from "./routes/friendRequest.routes.js";
+import friendRequestRouter from  "./routes/friend-request.routes.js"
 import notificationRouter from "./routes/notification.routes.js";
 import callLogRouter from "./routes/callLog.routes.js";
 import healthcheckRouter from "./routes/healthcheck.routes.js";

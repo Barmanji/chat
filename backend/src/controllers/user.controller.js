@@ -1,10 +1,10 @@
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { ApiError } from "../utils/ApiError.js";
-import { User } from "../models/user.model.js";
+import { User } from "../models/user/user.model.js";
 import {
     uploadResultCloudinary,
     deleteFromCloudinary,
-} from "../utils/FileUploadCloudinary.js";
+} from "../utils/fileUploaderCloudinary.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import jwt from "jsonwebtoken";
 
@@ -64,8 +64,6 @@ const registerUser = asyncHandler(async (req, res) => {
             "Profile image isn't uploaded properly on cloudinary"
         );
     }
-    const coverImageUploadedOnClodinary =
-        await uploadResultCloudinary(coverImageLocalPath);
 
     //console.log("req.files: ",req.files)
     const user = await User.create({
@@ -319,7 +317,7 @@ const updateUserBio = asyncHandler(async (req, res) => {
 
 const getFriendsList = asyncHandler(async (req, res) => {
     const { username } = req.params;
-    const userWithFriends = await User.findOne(username).populate({
+    const userWithFriends = await User.findOne({username}).populate({
         path: "friends",
         select: "_id username fullname profilePicture status",
     });

@@ -1,40 +1,31 @@
 import express from "express";
 import { verifyJWT } from "../middlewares/auth.middleware.js";
 import {
-    accessOrCreateOneToOneChat,
-    fetchUserChats,
-    createGroup,
-    updateGroupInfo,
-    deleteGroup,
-    addMembersToGroup,
-    removeMembersFromGroup,
+    createChat,
+    getUserChats,
     getChatById,
-    markMessagesAsSeen
+    addUserToGroup,
+    removeUserFromGroup,
+    updateTypingStatus,
+    deleteChat,
+    createGroupChat
 } from "../controllers/chat.controller.js";
 
 const router = express.Router();
 
-// Protected routes
+// Protected routes only
 router.use(verifyJWT);
 
-// Create or access 1-to-1 chat
-router.route("/one-to-one/:targetUserId").post(accessOrCreateOneToOneChat);
+// Routes
+router.route("/").post(createChat).get(getUserChats); // POST = create chat, GET = get user's chats
 
-// Get all chats for current user (1-1 and group)
-router.route("/").get(fetchUserChats);
+router.route("/:chatId").get(getChatById).delete(deleteChat);
 
-// Get a single chat by ID (for fetching typing users, etc.)
-router.route("/:chatId").get(getChatById);
+router.route("/group/add-user").put(addUserToGroup);
+router.route("/group/remove-user").put(removeUserFromGroup);
 
-// Mark all messages as seen in a chat
-router.route("/:chatId/seen").put(markMessagesAsSeen);
+router.route("/typing").put(updateTypingStatus);
 
-// GROUP CHAT ROUTES
-router.route("/group/create").post(createGroup);
-router.route("/group/update/:groupId").put(updateGroupInfo);
-router.route("/group/delete/:groupId").delete(deleteGroup);
-router.route("/group/:groupId/add").put(addMembersToGroup);
-router.route("/group/:groupId/remove").put(removeMembersFromGroup);
+router.route("/group").post(createGroupChat); // create group chat
 
 export default router;
-

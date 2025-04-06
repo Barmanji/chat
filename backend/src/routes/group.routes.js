@@ -1,51 +1,40 @@
 import express from "express";
 import { verifyJWT } from "../middlewares/auth.middleware.js";
-import { upload } from "../middlewares/multer.middleware.js";
 import {
     createGroup,
     updateGroupInfo,
     deleteGroup,
     addMembersToGroup,
     removeMembersFromGroup,
-    getGroupDetails,
-    getMyGroups
+    getGroupById,
+    getUserGroups,
+    leaveGroup,
+    getGroupMembers,
 } from "../controllers/group.controller.js";
 
 const router = express.Router();
 
-// Protected routes only
 router.use(verifyJWT);
 
-// Create group (with optional group picture upload)
-router.route("/create").post(
-    upload.fields([
-        { name: "groupPicture", maxCount: 1 }
-    ]),
-    createGroup
-);
+router.route("/")
+    .post(createGroup)
+    .get(getUserGroups);
 
-// Update group info (name, description, picture)
-router.route("/:groupId").put(
-    upload.fields([
-        { name: "groupPicture", maxCount: 1 }
-    ]),
-    updateGroupInfo
-);
+router.route("/:groupId")
+    .get(getGroupById)
+    .put(updateGroupInfo)
+    .delete(deleteGroup);
 
-// Delete group
-router.route("/:groupId").delete(deleteGroup);
+router.route("/:groupId/add-members")
+    .put(addMembersToGroup);
 
-// Add members to group
-router.route("/:groupId/add-members").put(addMembersToGroup);
+router.route("/:groupId/remove-members")
+    .put(removeMembersFromGroup);
 
-// Remove members from group
-router.route("/:groupId/remove-members").put(removeMembersFromGroup);
+router.route("/:groupId/leave")
+    .put(leaveGroup);
 
-// Get group details
-router.route("/:groupId").get(getGroupDetails);
-
-// Get groups current user is a member of
-router.route("/").get(getMyGroups);
+router.route("/:groupId/members")
+    .get(getGroupMembers);
 
 export default router;
-

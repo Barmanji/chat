@@ -35,12 +35,12 @@ router.route("/refresh-token").post(refreshAccessToken);
 router.use(verifyJWT); // applied to all routes below this line COOL AF
 
 router.route("/logout").post(logoutUser);
-router.route("/curren-user").get(getCurrentUser);
+router.route("/current-user").get(getCurrentUser);
 router.route("/change-password").put(changeCurrentPassword);
 router.route("/update-account").put(updateAccountDetails);
-router.route("/update-avatar").put(upload.single("avatar"), updateUserProfilePicture);
+router.route("/update-profile-picture").put(upload.single("profilePicture"), updateUserProfilePicture);
 router.route("/update-bio").put(updateUserBio);
-router.route("/friends").get(getFriendsList);
+router.route("/get-friend-list").get(getFriendsList);
 router.route("/c/:username").get(getUserProfile);
 
 export default router;
