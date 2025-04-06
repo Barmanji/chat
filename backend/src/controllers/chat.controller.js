@@ -4,7 +4,6 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { Chat } from "../models/chat/chat.model.js";
 
-// 1. Create one-on-one or group chat reference
 const createChat = asyncHandler(async (req, res) => {
     const { participantIds, isGroupChat, groupId } = req.body;
 
@@ -21,7 +20,6 @@ const createChat = asyncHandler(async (req, res) => {
     res.status(201).json(new ApiResponse(201, chat, "Chat created successfully"));
 });
 
-// 2. Get all chats of the logged-in user
 const getUserChats = asyncHandler(async (req, res) => {
     const userId = req.user._id;
 
@@ -33,7 +31,6 @@ const getUserChats = asyncHandler(async (req, res) => {
     res.status(200).json(new ApiResponse(200, chats));
 });
 
-// 3. Get chat by ID
 const getChatById = asyncHandler(async (req, res) => {
     const { chatId } = req.params;
 
@@ -50,7 +47,6 @@ const getChatById = asyncHandler(async (req, res) => {
     res.status(200).json(new ApiResponse(200, chat));
 });
 
-// 4. Add a user to a group chat
 const addUserToGroup = asyncHandler(async (req, res) => {
     const { chatId, userId } = req.body;
 
@@ -69,7 +65,6 @@ const addUserToGroup = asyncHandler(async (req, res) => {
     res.status(200).json(new ApiResponse(200, chat, "User added to group"));
 });
 
-// 5. Remove a user from a group chat
 const removeUserFromGroup = asyncHandler(async (req, res) => {
     const { chatId, userId } = req.body;
 
@@ -84,7 +79,6 @@ const removeUserFromGroup = asyncHandler(async (req, res) => {
     res.status(200).json(new ApiResponse(200, chat, "User removed from group"));
 });
 
-// 6. Update typing status for a user
 const updateTypingStatus = asyncHandler(async (req, res) => {
     const { chatId, isTyping } = req.body;
     const userId = req.user._id;
@@ -104,7 +98,6 @@ const updateTypingStatus = asyncHandler(async (req, res) => {
     res.status(200).json(new ApiResponse(200, null, "Typing status updated"));
 });
 
-// 7. Delete chat
 const deleteChat = asyncHandler(async (req, res) => {
     const { chatId } = req.params;
 
@@ -114,7 +107,6 @@ const deleteChat = asyncHandler(async (req, res) => {
     res.status(200).json(new ApiResponse(200, chat, "Chat deleted successfully"));
 });
 
-// 8. Create group chat
 const createGroupChat = asyncHandler(async (req, res) => {
     const { name, description, members, adminId } = req.body;
 

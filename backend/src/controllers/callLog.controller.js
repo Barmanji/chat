@@ -4,7 +4,6 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 import mongoose, { isValidObjectId } from "mongoose";
 import { asyncHandler } from "../utils/asyncHandler.js";
 
-// Create a call log
 const createCallLog = asyncHandler(async (req, res) => {
     const { receiver, callType, status } = req.body;
     const caller = req.user._id;
@@ -22,7 +21,6 @@ const createCallLog = asyncHandler(async (req, res) => {
     res.status(201).json(new ApiResponse(201, log, "Call log created"));
 });
 
-// Get all logs where user is either caller or receiver
 const getUserCallLogs = asyncHandler(async (req, res) => {
     const userId = req.user._id;
 
@@ -36,7 +34,6 @@ const getUserCallLogs = asyncHandler(async (req, res) => {
     res.status(200).json(new ApiResponse(200, logs));
 });
 
-// Get a specific call log by ID
 const getCallLogById = asyncHandler(async (req, res) => {
     const { logId } = req.params;
 
@@ -51,7 +48,6 @@ const getCallLogById = asyncHandler(async (req, res) => {
     res.status(200).json(new ApiResponse(200, log));
 });
 
-// Delete a call log by ID (only if user is caller or receiver)
 const deleteCallLog = asyncHandler(async (req, res) => {
     const { logId } = req.params;
     const userId = req.user._id;

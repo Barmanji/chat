@@ -5,7 +5,6 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 import { FriendRequest } from "../models/friends/friendRequest.model.js";
 import { User } from "../models/user/user.model.js"; // Needed for adding to friends list
 
-// 1. Send Friend Request
 const sendFriendRequest = asyncHandler(async (req, res) => {
     const from = req.user._id;
     const { to } = req.body;
@@ -28,7 +27,6 @@ const sendFriendRequest = asyncHandler(async (req, res) => {
     res.status(201).json(new ApiResponse(201, request, "Friend request sent"));
 });
 
-// 2. Get Outgoing Requests
 const getOutgoingRequests = asyncHandler(async (req, res) => {
     const from = req.user._id;
 
@@ -39,7 +37,6 @@ const getOutgoingRequests = asyncHandler(async (req, res) => {
     res.status(200).json(new ApiResponse(200, requests));
 });
 
-// 3. Get Incoming Requests
 const getIncomingRequests = asyncHandler(async (req, res) => {
     const to = req.user._id;
 
@@ -50,7 +47,6 @@ const getIncomingRequests = asyncHandler(async (req, res) => {
     res.status(200).json(new ApiResponse(200, requests));
 });
 
-// 4. Cancel Sent Request
 const cancelSentRequest = asyncHandler(async (req, res) => {
     const from = req.user._id;
     const { requestId } = req.params;
@@ -65,7 +61,6 @@ const cancelSentRequest = asyncHandler(async (req, res) => {
     res.status(200).json(new ApiResponse(200, null, "Friend request canceled"));
 });
 
-// 5. Accept Friend Request
 const acceptIncomingFriendRequest = asyncHandler(async (req, res) => {
     const to = req.user._id;
     const { requestId } = req.params;
@@ -85,7 +80,6 @@ const acceptIncomingFriendRequest = asyncHandler(async (req, res) => {
     res.status(200).json(new ApiResponse(200, request, "Friend request accepted"));
 });
 
-// 6. Reject Friend Request
 const rejectIncomingFriendRequest = asyncHandler(async (req, res) => {
     const to = req.user._id;
     const { requestId } = req.params;

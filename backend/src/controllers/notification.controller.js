@@ -4,7 +4,6 @@ import { ApiResponse } from '../utils/ApiResponse.js';
 import mongoose, { isValidObjectId } from 'mongoose';
 import { asyncHandler } from '../utils/asyncHandler.js';
 
-// 1. Create Notification
 const createNotification = asyncHandler(async (req, res) => {
     const { userId, type, data } = req.body;
 
@@ -19,7 +18,6 @@ const createNotification = asyncHandler(async (req, res) => {
     res.status(201).json(new ApiResponse(201, notification, "Notification created"));
 });
 
-// 2. Get All Notifications for Current User
 const getUserNotifications = asyncHandler(async (req, res) => {
     const userId = req.user._id;
 
@@ -28,7 +26,6 @@ const getUserNotifications = asyncHandler(async (req, res) => {
     res.status(200).json(new ApiResponse(200, notifications));
 });
 
-// 3. Mark a Specific Notification as Read
 const markNotificationAsRead = asyncHandler(async (req, res) => {
     const userId = req.user._id;
     const { notificationId } = req.params;
@@ -46,7 +43,6 @@ const markNotificationAsRead = asyncHandler(async (req, res) => {
     res.status(200).json(new ApiResponse(200, notification, "Notification marked as read"));
 });
 
-// 4. Delete a Notification
 const deleteNotification = asyncHandler(async (req, res) => {
     const userId = req.user._id;
     const { notificationId } = req.params;
@@ -60,7 +56,6 @@ const deleteNotification = asyncHandler(async (req, res) => {
     res.status(200).json(new ApiResponse(200, null, "Notification deleted"));
 });
 
-// 5. Mark All Notifications As Read
 const markAllNotificationsAsRead = asyncHandler(async (req, res) => {
     const userId = req.user._id;
 
@@ -69,7 +64,6 @@ const markAllNotificationsAsRead = asyncHandler(async (req, res) => {
     res.status(200).json(new ApiResponse(200, null, "All notifications marked as read"));
 });
 
-// 6. Clear All Notifications
 const clearAllNotifications = asyncHandler(async (req, res) => {
     const userId = req.user._id;
 

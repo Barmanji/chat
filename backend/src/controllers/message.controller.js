@@ -5,13 +5,15 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { Chat } from "../models/chat/chat.model.js";
 
-// 1. Send a Message
 const sendMessage = asyncHandler(async (req, res) => {
     const { chatId, content, messageType } = req.body;
     const senderId = req.user._id;
 
     if (!chatId || !content || !messageType) {
-        throw new ApiError(400, "chatId, content, and messageType are required");
+        throw new ApiError(
+            400,
+            "chatId, content, and messageType are required"
+        );
     }
 
     if (!isValidObjectId(chatId)) {
@@ -28,7 +30,6 @@ const sendMessage = asyncHandler(async (req, res) => {
     res.status(201).json(new ApiResponse(201, message, "Message sent"));
 });
 
-// 2. Get All Messages of a Chat
 const getMessages = asyncHandler(async (req, res) => {
     const { chatId } = req.params;
 
@@ -43,7 +44,6 @@ const getMessages = asyncHandler(async (req, res) => {
     res.status(200).json(new ApiResponse(200, messages));
 });
 
-// 3. Mark Message as Seen
 const markAsSeen = asyncHandler(async (req, res) => {
     const { messageId } = req.params;
 
@@ -60,7 +60,6 @@ const markAsSeen = asyncHandler(async (req, res) => {
     res.status(200).json(new ApiResponse(200, message, "Marked as seen"));
 });
 
-// 4. Mark Message as Delivered
 const markAsDelivered = asyncHandler(async (req, res) => {
     const { messageId } = req.params;
 
@@ -77,7 +76,6 @@ const markAsDelivered = asyncHandler(async (req, res) => {
     res.status(200).json(new ApiResponse(200, message, "Marked as delivered"));
 });
 
-// 5. Delete a Message
 const deleteMessage = asyncHandler(async (req, res) => {
     const { messageId } = req.params;
 
@@ -97,7 +95,6 @@ const deleteMessage = asyncHandler(async (req, res) => {
     res.status(200).json(new ApiResponse(200, null, "Message deleted"));
 });
 
-// 6. Edit a Message
 const editMessage = asyncHandler(async (req, res) => {
     const { messageId } = req.params;
     const { content } = req.body;
@@ -123,7 +120,6 @@ const editMessage = asyncHandler(async (req, res) => {
     res.status(200).json(new ApiResponse(200, message, "Message edited"));
 });
 
-// 7. Get Last Message of a Chat
 const getLastMessage = asyncHandler(async (req, res) => {
     const { chatId } = req.params;
 

@@ -4,7 +4,6 @@ import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 
-// 1. Create Group
 const createGroup = asyncHandler(async (req, res) => {
     const { name, description, members } = req.body;
     const admin = req.user._id;
@@ -21,7 +20,6 @@ const createGroup = asyncHandler(async (req, res) => {
     res.status(201).json(new ApiResponse(201, group, "Group created"));
 });
 
-// 2. Update Group Info
 const updateGroupInfo = asyncHandler(async (req, res) => {
     const { groupId } = req.params;
     const { name, description } = req.body;
@@ -43,7 +41,6 @@ const updateGroupInfo = asyncHandler(async (req, res) => {
     res.status(200).json(new ApiResponse(200, group, "Group info updated"));
 });
 
-// 3. Delete Group
 const deleteGroup = asyncHandler(async (req, res) => {
     const { groupId } = req.params;
 
@@ -59,7 +56,6 @@ const deleteGroup = asyncHandler(async (req, res) => {
     res.status(200).json(new ApiResponse(200, null, "Group deleted"));
 });
 
-// 4. Add Members
 const addMembersToGroup = asyncHandler(async (req, res) => {
     const { groupId } = req.params;
     const { members } = req.body;
@@ -75,9 +71,7 @@ const addMembersToGroup = asyncHandler(async (req, res) => {
         throw new ApiError(403, "Only the admin can add members");
     }
 
-    const uniqueMembers = members.filter(
-        (m) => !group.members.includes(m)
-    );
+    const uniqueMembers = members.filter((m) => !group.members.includes(m));
 
     group.members.push(...uniqueMembers);
     await group.save();
@@ -85,7 +79,6 @@ const addMembersToGroup = asyncHandler(async (req, res) => {
     res.status(200).json(new ApiResponse(200, group, "Members added"));
 });
 
-// 5. Remove Members
 const removeMembersFromGroup = asyncHandler(async (req, res) => {
     const { groupId } = req.params;
     const { members } = req.body;
@@ -110,7 +103,6 @@ const removeMembersFromGroup = asyncHandler(async (req, res) => {
     res.status(200).json(new ApiResponse(200, group, "Members removed"));
 });
 
-// 6. Get Group by ID
 const getGroupById = asyncHandler(async (req, res) => {
     const { groupId } = req.params;
 
@@ -123,7 +115,6 @@ const getGroupById = asyncHandler(async (req, res) => {
     res.status(200).json(new ApiResponse(200, group));
 });
 
-// 7. Get User's Groups
 const getUserGroups = asyncHandler(async (req, res) => {
     const groups = await Group.find({ members: req.user._id })
         .populate("admin", "username name")
@@ -132,7 +123,6 @@ const getUserGroups = asyncHandler(async (req, res) => {
     res.status(200).json(new ApiResponse(200, groups));
 });
 
-// 8. Leave Group
 const leaveGroup = asyncHandler(async (req, res) => {
     const { groupId } = req.params;
 
@@ -140,7 +130,10 @@ const leaveGroup = asyncHandler(async (req, res) => {
     if (!group) throw new ApiError(404, "Group not found");
 
     if (group.admin.toString() === req.user._id.toString()) {
-        throw new ApiError(403, "Admin cannot leave the group. Transfer admin first.");
+        throw new ApiError(
+            403,
+            "Admin cannot leave the group. Transfer admin first."
+        );
     }
 
     group.members = group.members.filter(
@@ -152,11 +145,13 @@ const leaveGroup = asyncHandler(async (req, res) => {
     res.status(200).json(new ApiResponse(200, group, "Left the group"));
 });
 
-// 9. Get Group Members
 const getGroupMembers = asyncHandler(async (req, res) => {
     const { groupId } = req.params;
 
-    const group = await Group.findById(groupId).populate("members", "username name");
+    const group = await Group.findById(groupId).populate(
+        "members",
+        "username name"
+    );
 
     if (!group) throw new ApiError(404, "Group not found");
 
