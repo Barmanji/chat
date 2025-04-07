@@ -26,7 +26,7 @@ import callLogRouter from "./routes/callLog.routes.js";
 import healthcheckRouter from "./routes/healthcheck.routes.js";
 
 // route declarations
-app.use("/api/v1/users", userRouter); // e.g., /api/v1/users/register
+app.use("/api/v1/user", userRouter); // e.g., /api/v1/users/register
 app.use("/api/v1/chats", chatRouter); // e.g., /api/v1/chats/group/create
 app.use("/api/v1/messages", messageRouter); // e.g., /api/v1/messages/:chatId
 app.use("/api/v1/groups", groupRouter); // e.g., /api/v1/groups/update-info

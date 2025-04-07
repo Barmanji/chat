@@ -15,7 +15,7 @@ router.use(verifyJWT);
 // Notification APIs
 router.post("/", createNotification);
 router.get("/", getUserNotifications);
-router.put("/mark-read/:notificationId", markNotificationAsRead);
+router.put("/:notificationId/mark-read", markNotificationAsRead);
 router.delete("/:notificationId", deleteNotification);
 router.put("/mark-all-read", markAllNotificationsAsRead);
 router.delete("/", clearAllNotifications);

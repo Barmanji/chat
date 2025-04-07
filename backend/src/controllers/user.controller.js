@@ -46,7 +46,7 @@ const registerUser = asyncHandler(async (req, res) => {
         throw new ApiError(409, "User with this email already exists");
     }
 
-    const profilePictureLocalPath = req.files?.avatar[0]?.path;
+    const profilePictureLocalPath = req.files?.profilePicture[0]?.path;
     //const coverImageLocalPath = req.files?.coverImage[0]?.path; //[0] is for first property
     if (!profilePictureLocalPath) {
         throw new ApiError(
@@ -315,79 +315,39 @@ const updateUserBio = asyncHandler(async (req, res) => {
         .json(new ApiResponse(200, updatedUser, "Bio updated successfully"));
 });
 
-const getFriendsList = asyncHandler(async (req, res) => {
-    const { username } = req.params;
-    const userWithFriends = await User.findOne({username}).populate({
-        path: "friends",
-        select: "_id username fullname profilePicture status",
-    });
-    if (!userWithFriends) {
-        throw new ApiError(404, "User not found");
-    }
+const getMyFriendsList = asyncHandler(async (req, res) => {
     return res
         .status(200)
-        .json(
-            new ApiResponse(200, userWithFriends.friends, "Friend list fetched")
-        );
+        .json(new ApiResponse(200, req.user.friends, "Friend list fetched"));
+});
+
+const getAnyUserFriendList = asyncHandler(async (req, res) => {
+    const { username } = req.params;
+    if (!username) {
+        throw new ApiError(400, "Username is required");
+    }
+    const user = await User.findOne({ username: username.toLowerCase() });
+    if (!user) {
+        throw new ApiError(404, "User not found");
+    }
+    const userFriend = user.friends;
+    return res
+        .status(200)
+        .json(new ApiResponse(200, userFriend, "Friend list fetched"));
 });
 
 const getUserProfile = asyncHandler(async (req, res) => {
     const { username } = req.params;
-    if (!username?.trim()) {
-        //can be done as !username?.trim()
-        throw new ApiError(400, "Username is not found");
+    if (!username) {
+        throw new ApiError(400, "Username is required");
     }
-    const dashboard = await User.aggregate([
-        {
-            $match: { username: username.toLowerCase() },
-        },
-        {
-            $lookup: {
-                from: "users", // same collection
-                localField: "friends",
-                foreignField: "_id",
-                as: "friendsList",
-            },
-        },
-        {
-            $project: {
-                username: 1,
-                fullname: 1,
-                email: 1,
-                bio: 1,
-                profilePicture: 1,
-                status: 1,
-                friendsList: {
-                    $map: {
-                        input: "$friendsList",
-                        as: "friend",
-                        in: {
-                            _id: "$$friend._id",
-                            username: "$$friend.username",
-                            fullname: "$$friend.fullname",
-                            profilePicture: "$$friend.profilePicture",
-                            status: "$$friend.status",
-                        },
-                    },
-                },
-            },
-        },
-    ]);
-
-    if (!dashboard?.length) {
-        throw new ApiError(404, "dashboard doesnt exist");
+    const user = await User.findOne({
+        username: username.toLowerCase(),
+    }).select("-__v -password -refreshToken");
+    if (!user) {
+        throw new ApiError(404, "User not found");
     }
-    console.log("dashboard: ", dashboard);
-    console.log("req.params :", req.params);
-    return res
-        .status(200)
-        .json(
-            new ApiResponse(
-                200,
-                channel[0],
-                "User dashboard fetched succesfully"
-            )
-        );
+    return res.status(200).json(new ApiResponse(200, user, "user fetched"));
 });
 
 export {
@@ -401,6 +361,7 @@ export {
     updateAccountDetails,
     updateUserProfilePicture,
     updateUserBio,
-    getFriendsList,
     getUserProfile,
+    getMyFriendsList,
+    getAnyUserFriendList,
 };

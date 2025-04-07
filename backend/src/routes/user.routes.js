@@ -11,8 +11,9 @@ import {
     updateAccountDetails,
     updateUserProfilePicture,
     updateUserBio,
-    getFriendsList,
-    getUserProfile
+    getUserProfile,
+    getAnyUserFriendList,
+    getMyFriendsList
 } from "../controllers/user.controller.js";
 
 
@@ -30,6 +31,8 @@ router.route("/register").post(
 )
 router.route("/login").post(loginUser);
 router.route("/refresh-token").post(refreshAccessToken);
+router.route("/get-any-user-friend-list/c/:username").get(getAnyUserFriendList);
+router.route("/c/:username").get(getUserProfile);
 
 // Protected routes
 router.use(verifyJWT); // applied to all routes below this line COOL AF
@@ -40,8 +43,7 @@ router.route("/change-password").put(changeCurrentPassword);
 router.route("/update-account").put(updateAccountDetails);
 router.route("/update-profile-picture").put(upload.single("profilePicture"), updateUserProfilePicture);
 router.route("/update-bio").put(updateUserBio);
-router.route("/get-friend-list").get(getFriendsList);
-router.route("/c/:username").get(getUserProfile);
+router.route("/get-my-friend-list").get(getMyFriendsList);
 
 export default router;
 

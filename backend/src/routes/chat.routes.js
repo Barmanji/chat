@@ -21,11 +21,12 @@ router.route("/").post(createChat).get(getUserChats); // POST = create chat, GET
 
 router.route("/:chatId").get(getChatById).delete(deleteChat);
 
-router.route("/group/add-user").put(addUserToGroup);
-router.route("/group/remove-user").put(removeUserFromGroup);
+// feels illegal
+// router.route("/group/add-user").put(addUserToGroup);
+// router.route("/group/remove-user").put(removeUserFromGroup);
+// router.route("/group").post(createGroupChat); // create group chat
 
 router.route("/typing").put(updateTypingStatus);
 
-router.route("/group").post(createGroupChat); // create group chat
 
 export default router;

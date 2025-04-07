@@ -58,9 +58,9 @@ const deleteGroup = asyncHandler(async (req, res) => {
 
 const addMembersToGroup = asyncHandler(async (req, res) => {
     const { groupId } = req.params;
-    const { members } = req.body;
+    const { memberId } = req.body;
 
-    if (!Array.isArray(members) || members.length === 0) {
+    if (!Array.isArray(memberId) || memberId.length === 0) {
         throw new ApiError(400, "Members must be a non-empty array");
     }
 
@@ -71,7 +71,7 @@ const addMembersToGroup = asyncHandler(async (req, res) => {
         throw new ApiError(403, "Only the admin can add members");
     }
 
-    const uniqueMembers = members.filter((m) => !group.members.includes(m));
+    const uniqueMembers = memberId.filter((m) => !group.members.includes(m));
 
     group.members.push(...uniqueMembers);
     await group.save();
